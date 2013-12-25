@@ -19,17 +19,17 @@ def main():
 def parse(minput, verbose):
 	global index
 	global cells
-	pindex = 0
+	pc = 0
 
-	while(pindex < len(minput)):
+	while(pc < len(minput)):
 		if verbose:
-			print (minput[:pindex] + "*" + minput[pindex] + "*" + minput[pindex + 1:])
+			print (minput[:pc] + "*" + minput[pc] + "*" + minput[pc + 1:])
 			for i in range(len(cells)):
 				if (i == index): print("[%d]" % cells[i]),
 				else: print(" %d " % cells[i]),
 			print
 
-		char = minput[pindex]
+		char = minput[pc]
 		if (char == '>'):
 			if (len(cells) <= (index + 1)):
 				cells.append(0)
@@ -38,9 +38,9 @@ def parse(minput, verbose):
 		elif (char == '.'): print(chr(cells[index])),
 		elif (char == ','): cells[index] = ord(sys.stdin.read(1))
 		elif (char == '['):
-			pindex += 1
+			pc += 1
 			lcount = 1
-			lend = pindex
+			lend = pc
 			while True:
 				#print lcount, minput[lend]
 				if minput[lend] == ']': lcount -= 1
@@ -48,11 +48,11 @@ def parse(minput, verbose):
 				lend += 1
 				if (lcount == 0): break
 
-			if (cells[index] != 0): parse(minput[pindex:lend - 1], verbose)
-			else: pindex = lend + 1
-			pindex -= 2
+			if (cells[index] != 0): parse(minput[pc:lend - 1], verbose)
+			else: pc = lend + 1
+			pc -= 2
 		elif (char == '-'): cells[index] -= 1
 		elif (char == '+'): cells[index] += 1
-		pindex += 1
+		pc += 1
 
 main()
