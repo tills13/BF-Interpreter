@@ -1,6 +1,8 @@
 import java.lang.StringBuffer;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.DataInputStream;
+import java.util.Scanner;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +14,7 @@ public class BF {
 	public static int occupiedCells = 1;
 	public static int [] cells = new int[NUM_CELLS];
 
-	public static void parse(String program, boolean verbose) {
+	public static void parse(String program, boolean verbose) throws IOException {
 		int pc = 0;
 		while (pc < program.length()) {
 			if (verbose) {
@@ -35,7 +37,9 @@ public class BF {
 			} else if (program.charAt(pc) == '<') index--;
 			else if (program.charAt(pc) == '.') System.out.print((char)cells[index]);
 			else if (program.charAt(pc) == ',') {
-				
+				cells[index] = new DataInputStream(System.in).readByte();
+				if (cells[index] == 10) cells[index] = 0;
+				System.out.println(cells[index]);
 			} else if (program.charAt(pc) == '[') {
 					pc++;
 					int lcount = 1;
@@ -67,10 +71,16 @@ public class BF {
 			if (arg.contains("file")) filePath = arg.substring(arg.indexOf("=") + 1, arg.length());
 		}
 
-		BufferedReader reader = new BufferedReader(new FileReader(filePath));
 		StringBuffer sb = new StringBuffer();
 		String line = null;
-		while ((line = reader.readLine()) != null) sb.append(line);
+		Scanner in = new Scanner(System.in);
+
+		if (filePath != "") {
+			BufferedReader reader = new BufferedReader(new FileReader(filePath));
+			while ((line = reader.readLine()) != null) sb.append(line);
+		} else while(!(line = in.nextLine()).trim().equals("")) sb.append(line);
+		
 		parse(sb.toString(), verbose);
+		System.out.println();
 	}
 } 
